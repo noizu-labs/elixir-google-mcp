@@ -16,7 +16,7 @@ Built on [`:noizu_mcp`](https://hex.pm/packages/noizu_mcp). Speaks MCP over
 ```elixir
 def deps do
   [
-    {:noizu_google_mcp, "~> 0.1.0"}
+    {:noizu_google_mcp, "~> 0.1.1"}
   ]
 end
 ```
@@ -28,13 +28,21 @@ Runtime dependencies are `:noizu_mcp`, `:noizu_google`, and Jason.
 | Variable | Purpose |
 |----------|---------|
 | `GOOGLE_ACCESS_TOKEN` | Bearer token (preferred for short sessions) |
+| `GOOGLE_APPLICATION_CREDENTIALS` | Path to a GCP service-account JSON key |
+| `GOOGLE_CREDENTIALS_FILE` / `GOOGLE_SERVICE_ACCOUNT_FILE` | Aliases for the JSON path |
+| `GOOGLE_SERVICE_ACCOUNT_JSON` | Inline service-account JSON object |
+| `GOOGLE_SCOPES` | Space-separated scopes for the service-account grant (default: Search Console `webmasters`) |
+| `GOOGLE_SUBJECT` / `GOOGLE_IMPERSONATE` | Domain-wide delegation subject |
 | `GOOGLE_REFRESH_TOKEN` | Refresh when access token absent |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Required for refresh |
 
-Aliases: `GOOGLE_MARKETING_*` for the same keys.
+Aliases: `GOOGLE_MARKETING_*` for the user-OAuth keys.
+
+Service-account auth signs a JWT and exchanges it at Google's token endpoint.
+For Search Console, add the service-account email as a user on each property.
 
 Google Ads tools also need a developer token (`GOOGLE_ADS_DEVELOPER_TOKEN`)
-and, for MCC logins, `GOOGLE_ADS_LOGIN_CUSTOMER_ID`. Obtain tokens with the
+and, for MCC logins, `GOOGLE_ADS_LOGIN_CUSTOMER_ID`. Obtain user tokens with the
 OAuth Mix tasks in `:noizu_google` (`mix google.oauth.authorize` /
 `mix google.oauth.exchange`).
 
@@ -44,8 +52,12 @@ From this project, or any Mix project that depends on it:
 
 ```sh
 mix deps.get
-export GOOGLE_ACCESS_TOKEN=...
+export GOOGLE_APPLICATION_CREDENTIALS=/absolute/path/to/sa.json
+# or: export GOOGLE_ACCESS_TOKEN=...
 mix run --no-halt
+
+A wrapper that `cd`s into this project lives at `bin/noizu-google-mcp`
+(for Grok / Claude stdio config when the host has no `cwd` field).
 ```
 
 The application starts `{Noizu.Google.MCP, transport: :stdio}` unless you set:
@@ -67,7 +79,7 @@ disable stdio so `mix test` does not attach to stdin).
       "args": ["run", "--no-halt"],
       "cwd": "/absolute/path/to/elixir-google-mcp",
       "env": {
-        "GOOGLE_ACCESS_TOKEN": "..."
+        "GOOGLE_APPLICATION_CREDENTIALS": "/absolute/path/to/sa.json"
       }
     }
   }
@@ -114,8 +126,8 @@ Or Streamable HTTP if you already run a `:noizu_mcp` HTTP transport — pass the
 same options `Noizu.MCP.Server` accepts.
 
 `Noizu.Google.MCP.Auth.client/0` builds a `%Noizu.Google.Client{}` from the
-environment / `:noizu_google` application config and refreshes when only a
-refresh token is set.
+environment / `:noizu_google` application config. It prefers a bearer token,
+then a service-account JSON key, then an OAuth refresh token.
 
 ## Development
 

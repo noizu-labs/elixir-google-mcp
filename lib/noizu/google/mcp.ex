@@ -4,9 +4,10 @@ defmodule Noizu.Google.MCP do
 
   Speaks MCP over **stdio** when started via the application (`mix run --no-halt`).
 
-  Auth: set `GOOGLE_ACCESS_TOKEN` or the OAuth refresh trio
+  Auth: set `GOOGLE_ACCESS_TOKEN`, a service-account JSON path
+  (`GOOGLE_APPLICATION_CREDENTIALS`), or the OAuth refresh trio
   (`GOOGLE_REFRESH_TOKEN` + `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET`).
-  `GOOGLE_MARKETING_*` aliases are accepted for the same keys.
+  `GOOGLE_MARKETING_*` aliases are accepted for the user-OAuth keys.
 
   See the [README](readme.html) for the tool table, agent config, and
   `start_stdio` embedding notes.
@@ -14,7 +15,7 @@ defmodule Noizu.Google.MCP do
 
   use Noizu.MCP.Server,
     name: "noizu_google",
-    version: "0.1.0",
+    version: "0.1.1",
     instructions: """
     Manage and query Google marketing products via the Noizu Google client.
 

@@ -5,7 +5,9 @@
       "args": ["run", "--no-halt"],
       "cwd": "REPLACE_WITH_ABS_PATH/elixir-google-mcp",
       "env": {
-        "GOOGLE_ACCESS_TOKEN": "from-session-or-refresh",
+        "GOOGLE_APPLICATION_CREDENTIALS": "/absolute/path/to/service-account.json",
+        "GOOGLE_SCOPES": "https://www.googleapis.com/auth/webmasters",
+        "GOOGLE_ACCESS_TOKEN": "",
         "GOOGLE_REFRESH_TOKEN": "",
         "GOOGLE_CLIENT_ID": "",
         "GOOGLE_CLIENT_SECRET": "",

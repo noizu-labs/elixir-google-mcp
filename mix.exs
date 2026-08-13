@@ -1,7 +1,7 @@
 defmodule Noizu.Google.MCP.MixProject do
   use Mix.Project
 
-  @version "0.1.0"
+  @version "0.1.1"
   @source_url "https://github.com/noizu-labs/elixir-google-mcp"
   @hexdocs_url "https://hexdocs.pm/noizu_google_mcp"
 
@@ -33,10 +33,20 @@ defmodule Noizu.Google.MCP.MixProject do
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
+  defp noizu_google_dep do
+    sibling = Path.expand("../../api/elixir-google", __DIR__)
+
+    if File.dir?(Path.join(sibling, "lib")) do
+      {:noizu_google, path: sibling, override: true}
+    else
+      {:noizu_google, "~> 0.2.4"}
+    end
+  end
+
   defp deps do
     [
       {:noizu_mcp, "~> 0.1.5"},
-      {:noizu_google, "~> 0.2.3"},
+      noizu_google_dep(),
       {:jason, "~> 1.4"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
@@ -73,6 +83,7 @@ defmodule Noizu.Google.MCP.MixProject do
       },
       files: ~w(
         lib
+        bin
         .formatter.exs
         .mcp.json.example
         mix.exs

@@ -3,6 +3,13 @@
 All notable changes to this project are documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.1.1
+
+- Service-account JSON via `GOOGLE_APPLICATION_CREDENTIALS` (and aliases)
+- Optional `GOOGLE_SERVICE_ACCOUNT_JSON`, `GOOGLE_SCOPES`, `GOOGLE_SUBJECT`
+- `bin/noizu-google-mcp` stdio wrapper for hosts without a `cwd` field
+- Local sibling path override for `:noizu_google` when developing next to the SDK
+
 ## 0.1.0
 
 - Initial release: MCP stdio server wrapping `:noizu_google`
