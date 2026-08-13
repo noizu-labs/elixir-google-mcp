@@ -62,6 +62,13 @@ defmodule Noizu.Google.MCP.MixProject do
         "MCP Specification" => "https://modelcontextprotocol.io",
         "Noizu Google" => "https://hex.pm/packages/noizu_google",
         "Noizu MCP" => "https://hex.pm/packages/noizu_mcp",
+        "Search Console API" => "https://developers.google.com/webmaster-tools",
+        "Analytics Admin API" =>
+          "https://developers.google.com/analytics/devguides/config/admin/v1",
+        "Analytics Data API" =>
+          "https://developers.google.com/analytics/devguides/reporting/data/v1",
+        "AdSense Management API" => "https://developers.google.com/adsense/management",
+        "Google Ads API" => "https://developers.google.com/google-ads/api/docs/start",
         "Noizu Labs" => "https://github.com/noizu-labs"
       },
       files: ~w(
