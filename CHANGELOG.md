@@ -3,6 +3,12 @@
 All notable changes to this project are documented in this file.
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+- Read tools granted by default; write tools require `GOOGLE_MCP_WRITES=1`
+- Ads write tools still default to `dry_run` and need `confirm` for live applies
+- Client install docs for Codex, Cursor, and VS Code (plus Claude / Grok)
+
 ## 0.1.1
 
 - Service-account JSON via `GOOGLE_APPLICATION_CREDENTIALS` (and aliases)

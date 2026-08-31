@@ -116,7 +116,8 @@ defmodule Noizu.Google.MCP.MixProject do
         Core: [
           Noizu.Google.MCP,
           Noizu.Google.MCP.Application,
-          Noizu.Google.MCP.Auth
+          Noizu.Google.MCP.Auth,
+          Noizu.Google.MCP.Writes
         ],
         "Tools — Search Console": [
           Noizu.Google.MCP.Tools.SearchConsole.SitesList,
