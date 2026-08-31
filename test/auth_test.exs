@@ -98,7 +98,12 @@ defmodule Noizu.Google.MCP.AuthTest do
       "token_uri" => "https://oauth2.googleapis.com/token"
     }
 
-    path = Path.join(System.tmp_dir!(), "noizu-google-mcp-sa-#{System.unique_integer([:positive])}.json")
+    path =
+      Path.join(
+        System.tmp_dir!(),
+        "noizu-google-mcp-sa-#{System.unique_integer([:positive])}.json"
+      )
+
     File.write!(path, Jason.encode!(creds))
     path
   end

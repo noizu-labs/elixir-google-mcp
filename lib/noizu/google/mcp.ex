@@ -9,8 +9,11 @@ defmodule Noizu.Google.MCP do
   (`GOOGLE_REFRESH_TOKEN` + `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET`).
   `GOOGLE_MARKETING_*` aliases are accepted for the user-OAuth keys.
 
-  See the [README](readme.html) for the tool table, agent config, and
+  See the [README](readme.html) for the tool table, client install, and
   `start_stdio` embedding notes.
+
+  Read tools are granted by default. Write tools require `GOOGLE_MCP_WRITES=1`.
+  Ads mutates still default to `dry_run` and need `confirm=true` for live applies.
   """
 
   use Noizu.MCP.Server,
@@ -18,6 +21,11 @@ defmodule Noizu.Google.MCP do
     version: "0.1.1",
     instructions: """
     Manage and query Google marketing products via the Noizu Google client.
+
+    Read tools are granted by default. Write tools (Search Console add/delete
+    site or sitemap, Ads mutate / create conversion action) are listed and
+    callable only when GOOGLE_MCP_WRITES=1. Ads live applies still need
+    dry_run=false and confirm=true.
 
     Search Console tools (category SearchConsole):
     - SearchConsole.SitesList / SitesGet — list or get a property
@@ -55,4 +63,28 @@ defmodule Noizu.Google.MCP do
   tool(Noizu.Google.MCP.Tools.Ads.ListConversionActions, category: "Ads")
   tool(Noizu.Google.MCP.Tools.Ads.Mutate, category: "Ads")
   tool(Noizu.Google.MCP.Tools.Ads.CreateConversionAction, category: "Ads")
+
+  @impl true
+  def handle_list_tools(cursor, _ctx) do
+    Noizu.MCP.Server.Features.Tools.list_registered(visible_tools(), cursor)
+  end
+
+  @impl true
+  def handle_call_tool(name, args, ctx) do
+    if not Noizu.Google.MCP.Writes.enabled?() and Noizu.Google.MCP.Writes.write_tool?(name) do
+      {:error, Noizu.Google.MCP.Writes.disabled_message(name)}
+    else
+      Noizu.MCP.Server.Features.Tools.dispatch(__mcp__(:tools), name, args, ctx)
+    end
+  end
+
+  defp visible_tools do
+    tools = __mcp__(:tools)
+
+    if Noizu.Google.MCP.Writes.enabled?() do
+      tools
+    else
+      Enum.reject(tools, fn {mod, _opts} -> Noizu.Google.MCP.Writes.write_module?(mod) end)
+    end
+  end
 end
