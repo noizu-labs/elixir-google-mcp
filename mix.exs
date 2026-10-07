@@ -45,7 +45,7 @@ defmodule Noizu.Google.MCP.MixProject do
 
   defp deps do
     [
-      {:noizu_mcp, "~> 0.1.5"},
+      {:noizu_mcp, "~> 0.5.0"},
       noizu_google_dep(),
       {:jason, "~> 1.4"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
